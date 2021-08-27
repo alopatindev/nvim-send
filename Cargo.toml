@@ -1,0 +1,10 @@
+[package]
+name = "nvim-send"
+version = "0.0.1"
+edition = "2018"
+
+[dependencies]
+anyhow = "1"
+clap = "2"
+nvim-rs = { git = "https://github.com/KillTheMule/nvim-rs", features = ["use_tokio"] } # TODO: version
+tokio = "1"
