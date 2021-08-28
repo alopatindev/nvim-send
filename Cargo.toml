@@ -1,7 +1,14 @@
 [package]
 name = "nvim-send"
 version = "0.0.1"
+authors = ["Alexander Lopatin <github.com/alopatindev>"]
 edition = "2018"
+license = "MIT OR Apache-2.0"
+description = "Essentially the same thing as 'nvr --nostart --remote-send <keys>'"
+repository = "https://github.com/alopatindev/nvim-send"
+keywords = ["nvim", "neovim", "rpc", "cli", "client"]
+readme = "README.md"
+documentation = "https://github.com/alopatindev/nvim-send#readme"
 
 [dependencies]
 anyhow = "1"
