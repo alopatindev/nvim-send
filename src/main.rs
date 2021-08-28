@@ -1,6 +1,6 @@
 use anyhow::Context;
 use anyhow::Result;
-use clap::App;
+use clap::{crate_authors, crate_description, crate_name, crate_version, App};
 use nvim_rs::{
     create::tokio::{new_path, new_tcp},
     rpc::handler::Dummy,
@@ -9,7 +9,10 @@ use tokio::net::lookup_host;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let matches = App::new("nvim-send")
+    let matches = App::new(crate_name!())
+        .version(crate_version!())
+        .about(crate_description!())
+        .author(crate_authors!("\n"))
         .args_from_usage(
             "--remote-send=[keys]     'Send key presses'
              --servername=[address]   'Set the address to be used'",
