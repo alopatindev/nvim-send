@@ -27,18 +27,20 @@ async fn main() -> Result<()> {
     if lookup_host(server_address).await.is_ok() {
         let handler = Dummy::new();
         let (neovim, _job_handler) = new_tcp(server_address, handler).await?;
+        if let Some(command) = matches.value_of("command") {
+            neovim.command(command).await?;
+        }
         if let Some(keys) = matches.value_of("remote-send") {
             neovim.input(keys).await?;
-        } else if let Some(command) = matches.value_of("command") {
-            neovim.command(command).await?;
         }
     } else {
         let handler = Dummy::new();
         let (neovim, _job_handler) = new_path(server_address, handler).await?;
+        if let Some(command) = matches.value_of("command") {
+            neovim.command(command).await?;
+        }
         if let Some(keys) = matches.value_of("remote-send") {
             neovim.input(keys).await?;
-        } else if let Some(command) = matches.value_of("command") {
-            neovim.command(command).await?;
         }
     }
 
