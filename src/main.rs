@@ -14,7 +14,8 @@ async fn main() -> Result<()> {
         .about(crate_description!())
         .author(crate_authors!("\n"))
         .args_from_usage(
-            "--remote-send=[keys]     'Send key presses'
+            "--command=[command]      'Execute command'
+             --remote-send=[keys]     'Send key presses'
              --servername=[address]   'Set the address to be used'",
         )
         .get_matches();
@@ -23,18 +24,23 @@ async fn main() -> Result<()> {
         .value_of("servername")
         .context("servername not found")?;
 
-    let keys = matches.value_of("remote-send").context("keys not found")?;
-
-    let bytes_written = if lookup_host(server_address).await.is_ok() {
+    if lookup_host(server_address).await.is_ok() {
         let handler = Dummy::new();
         let (neovim, _job_handler) = new_tcp(server_address, handler).await?;
-        neovim.input(keys).await?
+        if let Some(keys) = matches.value_of("remote-send") {
+            neovim.input(keys).await?;
+        } else if let Some(command) = matches.value_of("command") {
+            neovim.command(command).await?;
+        }
     } else {
         let handler = Dummy::new();
         let (neovim, _job_handler) = new_path(server_address, handler).await?;
-        neovim.input(keys).await?
-    };
-    debug_assert_eq!(bytes_written as usize, keys.as_bytes().len());
+        if let Some(keys) = matches.value_of("remote-send") {
+            neovim.input(keys).await?;
+        } else if let Some(command) = matches.value_of("command") {
+            neovim.command(command).await?;
+        }
+    }
 
     Ok(())
 }
