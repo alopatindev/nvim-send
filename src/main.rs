@@ -5,7 +5,6 @@ use nvim_rs::{
     create::tokio::{new_path, new_tcp},
     rpc::handler::Dummy,
 };
-use tokio::net::lookup_host;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -24,9 +23,8 @@ async fn main() -> Result<()> {
         .value_of("servername")
         .context("servername not found")?;
 
-    if lookup_host(server_address).await.is_ok() {
-        let handler = Dummy::new();
-        let (neovim, _job_handler) = new_tcp(server_address, handler).await?;
+    let handler = Dummy::new();
+    if let Ok((neovim, _job_handler)) = new_tcp(server_address, handler).await {
         if let Some(command) = matches.value_of("command") {
             neovim.command(command).await?;
         }
@@ -35,12 +33,13 @@ async fn main() -> Result<()> {
         }
     } else {
         let handler = Dummy::new();
-        let (neovim, _job_handler) = new_path(server_address, handler).await?;
-        if let Some(command) = matches.value_of("command") {
-            neovim.command(command).await?;
-        }
-        if let Some(keys) = matches.value_of("remote-send") {
-            neovim.input(keys).await?;
+        if let Ok((neovim, _job_handler)) = new_path(server_address, handler).await {
+            if let Some(command) = matches.value_of("command") {
+                neovim.command(command).await?;
+            }
+            if let Some(keys) = matches.value_of("remote-send") {
+                neovim.input(keys).await?;
+            }
         }
     }
 
