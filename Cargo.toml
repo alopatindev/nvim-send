@@ -12,6 +12,6 @@ documentation = "https://github.com/alopatindev/nvim-send#readme"
 
 [dependencies]
 anyhow = "1"
-clap = "2"
+clap = { version = "4", features = ["cargo"] }
 nvim-rs = { version = "0.3", features = ["use_tokio"] }
 tokio = "1"
