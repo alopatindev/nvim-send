@@ -1,4 +1,4 @@
-use anyhow::{format_err, Context, Result};
+use anyhow::{Context, Result};
 use clap::{
     arg, builder::Command, crate_authors, crate_description, crate_name, crate_version, ArgMatches,
 };
@@ -47,14 +47,12 @@ async fn main() -> Result<()> {
     let handler = Dummy::new();
     if let Ok((neovim, _job_handler)) = new_tcp(server_address, handler).await {
         process_args(&neovim, matches).await?;
-        return Ok(());
     } else {
         let handler = Dummy::new();
         if let Ok((neovim, _job_handler)) = new_path(server_address, handler).await {
             process_args(&neovim, matches).await?;
-            return Ok(());
         }
     }
 
-    Err(format_err!("cannot connect"))
+    Ok(())
 }
