@@ -1,7 +1,7 @@
 # nvim-send
 [![Crates.io](https://img.shields.io/crates/v/nvim-send.svg)](https://crates.io/crates/nvim-send)
 
-⚠️ **DEPRECATED/UNMAINTAINED!** ⚠️
+⚠️ **DEPRECATED / UNMAINTAINED!** ⚠️
 
 Please use `nvim --headless --clean --remote-expr <expr>` / `nvim --headless --clean --remote-send <keys>` (for nvim >= 0.7.0) or [`nvr --nostart --remote-send <keys>`](https://github.com/mhinz/neovim-remote#demos) for older versions.
 
